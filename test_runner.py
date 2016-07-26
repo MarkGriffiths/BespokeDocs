@@ -2,7 +2,7 @@ import sublime
 import sublime_plugin
 import unittest
 
-class __docblockr_test_replace_cursor_position(sublime_plugin.TextCommand):
+class __bespoke_docs_test_replace_cursor_position(sublime_plugin.TextCommand):
     def run(self, edit):
         cursor_placeholder = self.view.find('\|', 0)
 
@@ -23,13 +23,13 @@ class ViewTestCase(unittest.TestCase):
         # TODO there's probably a better way to initialise the testcase default settings
         settings = self.view.settings()
         settings.set('auto_indent', False)
-        settings.set('jsdocs_lower_case_primitives', False)
-        settings.set('jsdocs_param_description', True)
-        settings.set('jsdocs_per_section_indent', False)
-        settings.set('jsdocs_return_description', True)
-        settings.set('jsdocs_short_primitives', False)
-        settings.set('jsdocs_spacer_between_sections', False)
-        settings.set('jsdocs_function_description', True)
+        settings.set('lower_case_primitives', False)
+        settings.set('param_description', True)
+        settings.set('per_section_indent', False)
+        settings.set('return_description', True)
+        settings.set('short_primitives', False)
+        settings.set('spacer_between_sections', False)
+        settings.set('function_description', True)
 
         if int(sublime.version()) < 3000:
             self.edit = self.view.begin_edit()
@@ -46,7 +46,7 @@ class ViewTestCase(unittest.TestCase):
         if isinstance(content, list):
             content = '\n'.join(content)
         self.view.run_command('insert', {'characters': content})
-        self.view.run_command('__docblockr_test_replace_cursor_position')
+        self.view.run_command('__bespoke_docs_test_replace_cursor_position')
         self.view.set_syntax_file(self.get_syntax_file())
 
     def get_syntax_file(self):
@@ -55,10 +55,10 @@ class ViewTestCase(unittest.TestCase):
     def get_view_content(self):
         return self.view.substr(sublime.Region(0, self.view.size()))
 
-    def run_doc_blockr(self):
-        self.view.run_command('jsdocs')
+    def run_bespoke_docs(self):
+        self.view.run_command('bespoke_docs')
 
-    def assertDocBlockrResult(self, expected):
+    def assert_bespoke_docs_result(self, expected):
         if isinstance(expected, list):
             expected = '\n'.join(expected)
 
@@ -72,17 +72,17 @@ class ViewTestCase(unittest.TestCase):
 class TestJavaScript(ViewTestCase):
 
     def get_syntax_file(self):
-        return 'Packages/JavaScript/JavaScript.tmLanguage'
+        return 'Packages/Ecmascript Syntax/ecmascript.sublime-syntax'
 
     def test_basic(self):
         self.set_view_content("\n/**|\nbasic")
-        self.run_doc_blockr()
-        self.assertDocBlockrResult('\n/**\n * \n */\nbasic')
+        self.run_bespoke_docs()
+        self.assert_bespoke_docs_result('\n/**\n * \n */\nbasic')
 
     def test_empty_doc_blocks_are_created(self):
         self.set_view_content('/**')
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
+        self.run_bespoke_docs()
+        self.assert_bespoke_docs_result([
             "/**",
             " * |CURSOR|",
             " */"
@@ -90,8 +90,8 @@ class TestJavaScript(ViewTestCase):
 
     def test_that_function_template_is_added(self):
         self.set_view_content('/**|\nfunction foo () {')
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
+        self.run_bespoke_docs()
+        self.assert_bespoke_docs_result([
             '/**',
             ' * |SELECTION_BEGIN|[foo description]|SELECTION_END|',
             ' * @return {[type]} [description]',
@@ -101,8 +101,8 @@ class TestJavaScript(ViewTestCase):
 
     def test_parameters_are_added_to_function_templates(self):
         self.set_view_content('/**|\nfunction foo (bar, baz) {')
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
+        self.run_bespoke_docs()
+        self.assert_bespoke_docs_result([
             '/**',
             ' * |SELECTION_BEGIN|[foo description]|SELECTION_END|',
             ' * @param  {[type]} bar [description]',
@@ -114,9 +114,9 @@ class TestJavaScript(ViewTestCase):
 
     def test_parameters_are_added_to_function_template_with_description_disabled(self):
         self.set_view_content('/**|\nfunction foo (bar, baz) {')
-        self.view.settings().set('jsdocs_function_description', False)
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
+        self.view.settings().set('function_description', True)
+        self.run_bespoke_docs()
+        self.assert_bespoke_docs_result([
             '/**',
             ' * @param  |SELECTION_BEGIN|{[type]}|SELECTION_END| bar [description]',
             ' * @param  {[type]} baz [description]',
@@ -127,10 +127,10 @@ class TestJavaScript(ViewTestCase):
 
     def test_parameters_are_added_to_function_template_with_description_disabled_and_spacers_between_sections(self):
         self.set_view_content('/**|\nfunction foo (bar, baz) {')
-        self.view.settings().set('jsdocs_function_description', False)
-        self.view.settings().set('jsdocs_spacer_between_sections', True)
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
+        self.view.settings().set('function_description', False)
+        self.view.settings().set('spacer_between_sections', True)
+        self.run_bespoke_docs()
+        self.assert_bespoke_docs_result([
             '/**',
             ' * @param  |SELECTION_BEGIN|{[type]}|SELECTION_END| bar [description]',
             ' * @param  {[type]} baz [description]',
@@ -142,10 +142,10 @@ class TestJavaScript(ViewTestCase):
 
     def test_parameters_are_added_to_function_template_with_description_disabled_and_spacer_after_description_isset(self):
         self.set_view_content('/**|\nfunction foo (bar, baz) {')
-        self.view.settings().set('jsdocs_function_description', False)
-        self.view.settings().set('jsdocs_spacer_between_sections', 'after_description')
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
+        self.view.settings().set('function_description', False)
+        self.view.settings().set('spacer_between_sections', 'after_description')
+        self.run_bespoke_docs()
+        self.assert_bespoke_docs_result([
             '/**',
             ' * @param  |SELECTION_BEGIN|{[type]}|SELECTION_END| bar [description]',
             ' * @param  {[type]} baz [description]',
@@ -162,8 +162,8 @@ class TestJavaScript(ViewTestCase):
             '             quux',
             '             ) {'
         ])
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
+        self.run_bespoke_docs()
+        self.assert_bespoke_docs_result([
             '/**',
             ' * |SELECTION_BEGIN|[foo description]|SELECTION_END|',
             ' * @param  {[type]} bar  [description]',
@@ -182,8 +182,8 @@ class TestJavaScript(ViewTestCase):
             '/**|',
             'var foo = 1;'
         ])
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
+        self.run_bespoke_docs()
+        self.assert_bespoke_docs_result([
             '/**',
             ' * |SELECTION_BEGIN|[foo description]|SELECTION_END|',
             ' * @type {Number}',
@@ -196,8 +196,8 @@ class TestJavaScript(ViewTestCase):
             '/**|',
             'var foo = "a";'
         ])
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
+        self.run_bespoke_docs()
+        self.assert_bespoke_docs_result([
             '/**',
             ' * |SELECTION_BEGIN|[foo description]|SELECTION_END|',
             ' * @type {String}',
@@ -210,8 +210,8 @@ class TestJavaScript(ViewTestCase):
             '/**|',
             'var foo = \'a\';'
         ])
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
+        self.run_bespoke_docs()
+        self.assert_bespoke_docs_result([
             '/**',
             ' * |SELECTION_BEGIN|[foo description]|SELECTION_END|',
             ' * @type {String}',
@@ -224,8 +224,8 @@ class TestJavaScript(ViewTestCase):
             '/**|',
             'var foo = bar;'
         ])
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
+        self.run_bespoke_docs()
+        self.assert_bespoke_docs_result([
             '/**',
             ' * |SELECTION_BEGIN|[foo description]|SELECTION_END|',
             ' * @type {[type]}',
@@ -233,196 +233,15 @@ class TestJavaScript(ViewTestCase):
             'var foo = bar;'
         ])
 
-class TestPHP(ViewTestCase):
-
-    def get_syntax_file(self):
-        # Allows overriding with custom syntax
-        php_syntax_file = self.view.settings().get('doc_blockr_tests_php_syntax_file')
-        if not php_syntax_file:
-            return 'Packages/PHP/PHP.tmLanguage'
-        else:
-            return php_syntax_file
-
-    def test_basic(self):
-        self.set_view_content("<?php\n/**|\nbasic")
-        self.run_doc_blockr()
-        self.assertDocBlockrResult('<?php\n/**\n * \n */\nbasic')
-
-    def test_issue_292_php_args_pass_by_reference_missing_ampersand_char(self):
-        self.set_view_content("<?php\n/**|\nfunction function_name($a1,  $a2 = 'x', array $a3, &$b1, &$b2 = 'x', array &$b3) {}")
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
-            "<?php",
-            "/**",
-            " * |SELECTION_BEGIN|[function_name description]|SELECTION_END|",
-            " * @param  [type] $a1  [description]",
-            " * @param  string $a2  [description]",
-            " * @param  array  $a3  [description]",
-            " * @param  [type] &$b1 [description]",
-            " * @param  string &$b2 [description]",
-            " * @param  array  &$b3 [description]",
-            " * @return [type]      [description]",
-            " */",
-            "function function_name($a1,  $a2 = 'x', array $a3, &$b1, &$b2 = 'x', array &$b3) {}"
-        ])
-
-    def test_issue_286_php_args_namespace_char_is_missing(self):
-        self.set_view_content("<?php\n/**|\nfunction function_name(A\\NS\\ClassName $class) {}")
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
-            "<?php",
-            "/**",
-            " * |SELECTION_BEGIN|[function_name description]|SELECTION_END|",
-            " * @param  A\\NS\\ClassName $class [description]",
-            " * @return [type]                [description]",
-            " */",
-            "function function_name(A\\NS\\ClassName $class) {}"
-        ])
-
-    def test_issue_312_array_type_missing_when_param_is_null(self):
-        self.set_view_content("<?php\n/**|\nfunction fname(array $a, array $b = null) {}")
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
-            "<?php",
-            "/**",
-            " * |SELECTION_BEGIN|[fname description]|SELECTION_END|",
-            " * @param  array      $a [description]",
-            " * @param  array|null $b [description]",
-            " * @return [type]        [description]",
-            " */",
-            "function fname(array $a, array $b = null) {}"
-        ])
-
-    def test_issue_312_qualified_namespace_type_missing_when_param_is_null(self):
-        self.set_view_content("<?php\n/**|\nfunction fname(NS\\ClassA $a, NS\\ClassB $b = null) {}")
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
-            "<?php",
-            "/**",
-            " * |SELECTION_BEGIN|[fname description]|SELECTION_END|",
-            " * @param  NS\\ClassA      $a [description]",
-            " * @param  NS\\ClassB|null $b [description]",
-            " * @return [type]            [description]",
-            " */",
-            "function fname(NS\\ClassA $a, NS\\ClassB $b = null) {}"
-        ])
-
-    def test_issue_312_fully_qualified_namespace_type_missing_when_param_is_null(self):
-        self.set_view_content("<?php\n/**|\nfunction fname(\\NS\\ClassA $a, \\NS\\ClassB $b = null) {}")
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
-            "<?php",
-            "/**",
-            " * |SELECTION_BEGIN|[fname description]|SELECTION_END|",
-            " * @param  \\NS\\ClassA      $a [description]",
-            " * @param  \\NS\\ClassB|null $b [description]",
-            " * @return [type]             [description]",
-            " */",
-            "function fname(\\NS\\ClassA $a, \\NS\\ClassB $b = null) {}"
-        ])
-
-    def test_issue_371_with_long_array_syntax(self):
-        self.set_view_content("<?php\n/**|\npublic function test(array $foo = array()) {}")
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
-            "<?php",
-            "/**",
-            " * |SELECTION_BEGIN|[test description]|SELECTION_END|",
-            " * @param  array  $foo [description]",
-            " * @return [type]      [description]",
-            " */",
-            "public function test(array $foo = array()) {}"
-        ])
-
-    def test_issue_371_method_with_short_array_syntax(self):
-        self.set_view_content("<?php\n/**|\npublic function test(array $foo = []) {}")
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
-            "<?php",
-            "/**",
-            " * |SELECTION_BEGIN|[test description]|SELECTION_END|",
-            " * @param  array  $foo [description]",
-            " * @return [type]      [description]",
-            " */",
-            "public function test(array $foo = []) {}"
-        ])
-
-    def test_issue_371_method_with_short_array_syntax_with_whitespace(self):
-        self.set_view_content("<?php\n/**|\npublic function test(  array   $foo    =     [      ]       ) {}")
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
-            "<?php",
-            "/**",
-            " * |SELECTION_BEGIN|[test description]|SELECTION_END|",
-            " * @param  array  $foo [description]",
-            " * @return [type]      [description]",
-            " */",
-            "public function test(  array   $foo    =     [      ]       ) {}"
-        ])
-
-    def test_issue_372_property_with_short_array_syntax(self):
-        self.set_view_content("<?php\n/**|\nprotected $test = [];")
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
-            "<?php",
-            "/**",
-            " * |SELECTION_BEGIN|[$test description]|SELECTION_END|",
-            " * @var array",
-            " */",
-            "protected $test = [];"
-        ])
-
-    def test_optional_function_description(self):
-        self.set_view_content("<?php\n/**|\nfunction fname($a) {}")
-        self.view.settings().set('jsdocs_function_description', False)
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
-            "<?php",
-            "/**",
-            " * @param  |SELECTION_BEGIN|[type]|SELECTION_END| $a [description]",
-            " * @return [type]    [description]",
-            " */",
-            "function fname($a) {}"
-        ])
-
-    def test_optional_function_description_with_spacers_between_sections(self):
-        self.set_view_content("<?php\n/**|\nfunction fname($a) {}")
-        self.view.settings().set('jsdocs_function_description', False)
-        self.view.settings().set('jsdocs_spacer_between_sections', True)
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
-            "<?php",
-            "/**",
-            " * @param  |SELECTION_BEGIN|[type]|SELECTION_END| $a [description]",
-            " *",
-            " * @return [type]    [description]",
-            " */",
-            "function fname($a) {}"
-        ])
-
-    def test_optional_function_description_with_spacer_after_description_set_to_true(self):
-        self.set_view_content("<?php\n/**|\nfunction fname($a) {}")
-        self.view.settings().set('jsdocs_function_description', False)
-        self.view.settings().set('jsdocs_spacer_between_sections', 'after_description')
-        self.run_doc_blockr()
-        self.assertDocBlockrResult([
-            "<?php",
-            "/**",
-            " * @param  |SELECTION_BEGIN|[type]|SELECTION_END| $a [description]",
-            " * @return [type]    [description]",
-            " */",
-            "function fname($a) {}"
-        ])
-
-class RunDocBlockrTests(sublime_plugin.WindowCommand):
+class RunBespokeDocsTests(sublime_plugin.WindowCommand):
 
     def run(self):
 
         self.window.run_command('show_panel', {'panel': 'console'})
 
         print('')
-        print('DocBlockr Tests')
-        print('===============')
+        print('BespokeDocs Tests')
+        print('=================')
 
         suite = unittest.TestSuite()
         test_loader = unittest.TestLoader()
@@ -430,7 +249,6 @@ class RunDocBlockrTests(sublime_plugin.WindowCommand):
         # TODO move all test cases into tests directory and make test loader auto load testcases from the folder
 
         suite.addTests(test_loader.loadTestsFromTestCase(TestJavaScript))
-        suite.addTests(test_loader.loadTestsFromTestCase(TestPHP))
 
         # TODO toggle test verbosity
         unittest.TextTestRunner(verbosity=1).run(suite)

@@ -8,14 +8,14 @@
                 "children":
                 [
                     {
-                        "caption": "DocBlockr",
+                        "caption": "BespokeDocs",
                         "children":
                         [
                             {
                                 "caption": "README",
                                 "command": "open_file", "args":
                                 {
-                                    "file": "${packages}/DocBlockr/README.md"
+                                    "file": "${packages}/BespokeDocs/README.md"
                                 }
                             },
                             {
@@ -25,14 +25,14 @@
                                 "caption": "Settings – Default",
                                 "command": "open_file", "args":
                                 {
-                                    "file": "${packages}/DocBlockr/Base File.sublime-settings"
+                                    "file": "${packages}/BespokeDocs/BespokeDocs.sublime-settings"
                                 }
                             },
                             {
                                 "caption": "Settings – User",
                                 "command": "open_file", "args":
                                 {
-                                    "file": "${packages}/User/Base File.sublime-settings"
+                                    "file": "${packages}/User/BespokeDocs.sublime-settings"
                                 }
                             },
                             {
@@ -42,7 +42,7 @@
                                 "caption": "LICENSE",
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/DocBlockr/LICENSE"
+                                    "file": "${packages}/BespokeDocs/LICENSE"
                                 }
                             }
                         ]

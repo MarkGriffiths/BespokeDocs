@@ -1,10 +1,10 @@
 [
   {
-    "caption": "DocBlockr: Decorate line comment",
-    "command": "jsdocs_decorate"
+    "caption": "BespokeDocs: Decorate line comment",
+    "command": "bespoke_docs_decorate"
   },
   {
-    "caption": "DocBlockr: Reparse comment block",
-    "command": "jsdocs_reparse"
+    "caption": "BespokeDocs: Reparse comment block",
+    "command": "bespoke_docs_reparse"
   }
 ]

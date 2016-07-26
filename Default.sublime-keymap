@@ -1,6 +1,6 @@
 [
   // open a docblock with enter
-  { "keys": ["enter"], "command": "jsdocs",
+  { "keys": ["enter"], "command": "bespoke_docs",
     "context": [
       { "key": "setting.auto_indent",   "operator": "equal",          "operand": true,                        "match_all": true },
       { "key": "selection_empty",       "operator": "equal",          "operand": true,                        "match_all": true },
@@ -9,7 +9,7 @@
     ]
   },
   // open a docblock with keypad enter
-  { "keys": ["keypad_enter"], "command": "jsdocs",
+  { "keys": ["keypad_enter"], "command": "bespoke_docs",
     "context": [
       { "key": "setting.auto_indent",   "operator": "equal",          "operand": true,                        "match_all": true },
       { "key": "selection_empty",       "operator": "equal",          "operand": true,                        "match_all": true },
@@ -18,7 +18,7 @@
     ]
   },
   // open a docblock with tab
-  { "keys": ["tab"], "command": "jsdocs",
+  { "keys": ["tab"], "command": "bespoke_docs",
     "context": [
       { "key": "setting.auto_indent",   "operator": "equal",          "operand": true,                        "match_all": true },
       { "key": "selection_empty",       "operator": "equal",          "operand": true,                        "match_all": true },
@@ -54,7 +54,7 @@
     ]
   },
   // trim the automatically added whitespace
-  { "keys": ["enter"], "command": "jsdocs_trim_auto_whitespace",
+  { "keys": ["enter"], "command": "bespoke_docs_trim_auto_whitespace",
     "context": [
       { "key": "setting.auto_indent",                "operator": "equal",          "operand": true,            "match_all": true },
       { "key": "selector",                           "operator": "equal",          "operand": "comment.block", "match_all": true },
@@ -65,7 +65,7 @@
     ]
   },
   // trim the automatically added whitespace
-  { "keys": ["keypad_enter"], "command": "jsdocs_trim_auto_whitespace",
+  { "keys": ["keypad_enter"], "command": "bespoke_docs_trim_auto_whitespace",
     "context": [
       { "key": "setting.auto_indent",                "operator": "equal",          "operand": true,            "match_all": true },
       { "key": "selector",                           "operator": "equal",          "operand": "comment.block", "match_all": true },
@@ -79,7 +79,7 @@
   { "keys": ["enter"], "command": "insert_snippet", "args": {"contents": "\n${TM_CURRENT_LINE/^\\s*((?:#|\\/\\/[\\/!]?)\\s*).*/$1/}"},
     "context": [
       { "key": "setting.auto_indent",                "operator": "equal",          "operand": true,              "match_all": true },
-      { "key": "setting.jsdocs_extend_double_slash", "operator": "equal",          "operand": true,              "match_all": true },
+      { "key": "setting.extend_double_slash",        "operator": "equal",          "operand": true,              "match_all": true },
       { "key": "selector",                           "operator": "equal",          "operand": "comment.line",    "match_all": true },
       { "key": "auto_complete_visible",              "operator": "equal",          "operand": false,             "match_all": true },
       { "key": "preceding_text",                     "operator": "regex_contains", "operand": "^\\s*(\\/\\/[\\/!]?|#)", "match_all": true }
@@ -89,7 +89,7 @@
   { "keys": ["keypad_enter"], "command": "insert_snippet", "args": {"contents": "\n${TM_CURRENT_LINE/^\\s*((?:#|\\/\\/[\\/!]?)\\s*).*$/$1/}"},
     "context": [
       { "key": "setting.auto_indent",                "operator": "equal",          "operand": true,           "match_all": true },
-      { "key": "setting.jsdocs_extend_double_slash", "operator": "equal",          "operand": true,           "match_all": true },
+      { "key": "setting.extend_double_slash",        "operator": "equal",          "operand": true,           "match_all": true },
       { "key": "selector",                           "operator": "equal",          "operand": "comment.line", "match_all": true },
       { "key": "auto_complete_visible",              "operator": "equal",          "operand": false,          "match_all": true },
       { "key": "preceding_text",                     "operator": "regex_contains", "operand": "^\\s*\\/\\/[\\/!]?",  "match_all": true }
@@ -130,31 +130,31 @@
     ]
   },
   // De-indent at the end of a comment block
-  { "keys": ["enter"], "command": "jsdocs_deindent",
+  { "keys": ["enter"], "command": "bespoke_docs_deindent",
     "context": [
       { "key": "selection_empty", "operator": "equal",          "operand": true,        "match_all": true },
       { "key": "preceding_text",  "operator": "regex_contains", "operand": "^\\s+\\*/", "match_all": true }
     ]
   },
   // de-indent at the end of a comment block with keypad-enter
-  { "keys": ["keypad_enter"], "command": "jsdocs_deindent",
+  { "keys": ["keypad_enter"], "command": "bespoke_docs_deindent",
     "context": [
       { "key": "selection_empty", "operator": "equal",          "operand": true,        "match_all": true },
       { "key": "preceding_text",  "operator": "regex_contains", "operand": "^\\s+\\*/", "match_all": true }
     ]
   },
   // Open an inline docblock on space (/** */)
-  { "keys": [" "], "command": "jsdocs", "args": {"inline": true},
+  { "keys": [" "], "command": "bespoke_docs", "args": {"inline": true},
     "context": [
       { "key": "setting.auto_indent",              "operator": "equal",          "operand": true,              "match_all": true },
       { "key": "selection_empty",                  "operator": "equal",          "operand": true,              "match_all": true },
       { "key": "auto_complete_visible",            "operator": "equal",          "operand": false,             "match_all": true },
       { "key": "preceding_text",                   "operator": "regex_contains", "operand": "^\\s*\\/\\*{2}$", "match_all": true },
-      { "key": "setting.jsdocs_quick_open_inline", "operator": "equal",          "operand": true,              "match_all": true}
+      { "key": "setting.quick_open_inline",        "operator": "equal",          "operand": true,              "match_all": true}
     ]
   },
   // Open an inline docblock (/** */)
-  { "keys": ["shift+enter"], "command": "jsdocs", "args": {"inline": true},
+  { "keys": ["shift+enter"], "command": "bespoke_docs", "args": {"inline": true},
     "context": [
       { "key": "setting.auto_indent",   "operator": "equal",          "operand": true,              "match_all": true },
       { "key": "selection_empty",       "operator": "equal",          "operand": true,              "match_all": true },
@@ -163,7 +163,7 @@
     ]
   },
   // Open an inline docblock
-  { "keys": ["shift+keypad_enter"], "command": "jsdocs", "args": {"inline": true},
+  { "keys": ["shift+keypad_enter"], "command": "bespoke_docs", "args": {"inline": true},
     "context": [
       { "key": "setting.auto_indent",   "operator": "equal",          "operand": true,              "match_all": true },
       { "key": "selection_empty",       "operator": "equal",          "operand": true,              "match_all": true },
@@ -172,7 +172,7 @@
     ]
   },
   // show the autocomplete
-  { "keys": ["@"], "command": "run_macro_file", "args": {"file": "Packages/DocBlockr/jsdocs-auto-complete.sublime-macro"},
+  { "keys": ["@"], "command": "run_macro_file", "args": {"file": "Packages/BespokeDocs/BespokeDocs Auto Complete.sublime-macro"},
     "context": [
       { "key": "setting.auto_complete", "operator": "equal",    "operand": true,                           "match_all": true },
       { "key": "selection_empty", "operator": "equal",          "operand": true,                           "match_all": true },
@@ -181,7 +181,7 @@
     ]
   },
   // show the autocomplete in a coffee doc block
-  { "keys": ["@"], "command": "run_macro_file", "args": {"file": "Packages/DocBlockr/jsdocs-auto-complete.sublime-macro"},
+  { "keys": ["@"], "command": "run_macro_file", "args": {"file": "Packages/BespokeDocs/BespokeDocs Auto Complete.sublime-macro"},
     "context": [
       { "key": "selection_empty", "operator": "equal",          "operand": true,                              "match_all": true },
       { "key": "preceding_text",  "operator": "regex_contains", "operand": "^\\s*#\\s*$",                     "match_all": true },
@@ -189,9 +189,9 @@
     ]
   },
   // indent to align with the previous line
-  { "keys": ["tab"], "command": "jsdocs_indent",
+  { "keys": ["tab"], "command": "bespoke_docs_indent",
     "context": [
-      { "key": "setting.jsdocs_deep_indent", "operator": "equal",          "operand": true,            "match_all": true },
+      { "key": "setting.deep_indent",        "operator": "equal",          "operand": true,            "match_all": true },
       { "key": "setting.auto_indent",        "operator": "equal",          "operand": true,            "match_all": true },
       { "key": "selection_empty",            "operator": "equal",          "operand": true,            "match_all": true },
       { "key": "preceding_text",             "operator": "regex_contains", "operand": "^\\s*\\*\\s*$", "match_all": true },
@@ -199,47 +199,45 @@
     ]
   },
   // decorate a double-slash comment
-  { "keys": ["ctrl+enter"], "command": "jsdocs_decorate",
+  { "keys": ["ctrl+enter"], "command": "bespoke_docs_decorate",
     "context": [
-      { "key": "setting.jsdocs_decorate", "operator": "equal",          "operand": true, "match_all": true },
       { "key": "preceding_text",          "operator": "regex_contains", "operand": "^//.*", "match_all": true },
       { "key": "selector",                "operator": "equal", "operand": "meta.whitespace", "match_all": true }
     ]
   },
   // decorate a double-slash comment
-  { "keys": ["ctrl+keypad_enter"], "command": "jsdocs_decorate",
+  { "keys": ["ctrl+keypad_enter"], "command": "bespoke_docs_decorate",
     "context": [
-      { "key": "setting.jsdocs_decorate", "operator": "equal", "operand": true, "match_all": true },
       { "key": "preceding_text",          "operator": "regex_contains", "operand": "^//.*", "match_all": true },
       { "key": "selector",                "operator": "equal", "operand": "meta.whitespace", "match_all": true }
     ]
   },
   // join lines inside a comment block, stripping the leading asterisk
-  { "keys": ["ctrl+j"], "command": "jsdocs_join",
+  { "keys": ["ctrl+j"], "command": "bespoke_docs_join",
     "context": [
       { "key": "selector", "operator": "equal", "operand": "comment.block" }
     ]
   },
   // join lines in a line comment, stripping the leading // or #
-  { "keys": ["ctrl+j"], "command": "jsdocs_join",
+  { "keys": ["ctrl+j"], "command": "bespoke_docs_join",
     "context": [
       { "key": "selector", "operator": "equal", "operand": "comment.line" }
     ]
   },
   // reparse a comment block's placeholders
-  { "keys": ["shift+alt+tab"], "command": "jsdocs_reparse",
+  { "keys": ["shift+alt+tab"], "command": "bespoke_docs_reparse",
     "context": [
       { "key": "selector", "operator": "equal", "operand": "comment.block" }
     ]
   },
-  { "keys": ["alt+q"], "command": "jsdocs_wrap_lines",
+  { "keys": ["alt+q"], "command": "bespoke_docs_wrap_lines",
     "context": [
       { "key": "selector", "operator": "equal", "operand": "comment.block", "match_all": true }
     ]
   },
 
   // add line after, in a DocBlock
-  { "keys": ["ctrl+enter"], "command": "run_macro_file", "args": {"file": "Packages/DocBlockr/Add DocBlockr Line.sublime-macro"},
+  { "keys": ["ctrl+enter"], "command": "run_macro_file", "args": {"file": "Packages/BespokeDocs/Add Docs Line.sublime-macro"},
     "context": [
       { "key": "setting.auto_indent",   "operator": "equal",          "operand": true,            "match_all": true },
       { "key": "selector",              "operator": "equal",          "operand": "comment.block", "match_all": true },
@@ -249,7 +247,7 @@
   },
 
   // add line before, in a DocBlock
-  { "keys": ["ctrl+shift+enter"], "command": "run_macro_file", "args": {"file": "Packages/DocBlockr/Add DocBlockr Line Before.sublime-macro"},
+  { "keys": ["ctrl+shift+enter"], "command": "run_macro_file", "args": {"file": "Packages/BespokeDocs/Add Line Before Docs.sublime-macro"},
     "context": [
       { "key": "setting.auto_indent",   "operator": "equal",          "operand": true,            "match_all": true },
       { "key": "selector",              "operator": "equal",          "operand": "comment.block", "match_all": true },
