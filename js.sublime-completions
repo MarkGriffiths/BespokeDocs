@@ -1,7 +1,6 @@
 {
   "scope": "source.js comment.block",
-  "completions":
-  [
+  "completions": [
     { "trigger" : "@abstract",      "contents": ""},
     { "trigger" : "@access",        "contents": "@access {${1:[private|protected|public]}}"},
     { "trigger" : "@alias",         "contents": "@name ${1:[new name]}"},
@@ -76,7 +75,7 @@
     { "trigger" : "@var",           "contents": "@var {${1:[type]}} ${2:[description]}"},
     { "trigger" : "@variation",     "contents": "@variation ${1:[version]}"},
     { "trigger" : "@version",       "contents": "@version ${1:[version]}"},
-    { "trigger" : "@virtual",     "contents": ""},
+    { "trigger" : "@virtual",       "contents": ""},
     { "trigger" : "{@link}",        "contents": "{@link ${1:[symbol]}}"}
   ]
 }
