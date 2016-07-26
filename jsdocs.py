@@ -720,11 +720,8 @@ class JsdocsJavascript(JsdocsParser):
             yieldTag = '@yield' + ('s' if self.viewSettings.get('jsdocs_return_tag', '_')[-1] == 's' else '')
             description = ' ${1:[description]}' if self.viewSettings.get('jsdocs_return_description', True) else ''
             out.append({ 'tags': [
-                '%s {${1:[type]}}%s%s' % (
-                    yieldTag,
-                    ' ' if self.viewSettings.get('jsdocs_align_tags') == 'deep' and not self.viewSettings.get('jsdocs_per_section_indent') else '',
-                    description
-            )]})
+                '%s {${1:[type]}}%s' % (yieldTag, description)
+            ]})
         return out
 
     def guessTypeFromValue(self, val):
@@ -775,15 +772,13 @@ class JsdocsPHP(JsdocsParser):
             + '(?P<name>' + self.settings['fnIdentifier'] + ')'
             # function fnName
             # (arg1, arg2)
-            + '\\s*\\(\\s*(?P<args>.*)\\)'
-            # optional return type
-            + '(\\s*?:\\s*(?P<retval>' + self.settings['typeIdentifier'] + '))?',
+            + '\\s*\\(\\s*(?P<args>.*)\\)',
             line
         )
         if not res:
             return None
 
-        return (res.group('name'), res.group('args'), res.group('retval'))
+        return (res.group('name'), res.group('args'), None)
 
     def getArgType(self, arg):
 
@@ -878,10 +873,6 @@ class JsdocsPHP(JsdocsParser):
                 return 'string'
             if name == '__isset':
                 return 'bool' if shortPrimitives else 'boolean'
-
-        if (retval):
-            return retval
-
         return JsdocsParser.getFunctionReturnType(self, name, retval)
 
 
@@ -1345,6 +1336,7 @@ class JsdocsDecorateCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         v = self.view
         re_whitespace = re.compile("^(\\s*)//")
+        v.run_command('move', {'by': 'characters', 'forward': False})
         v.run_command('expand_selection', {'to': 'scope'})
         for sel in v.sel():
             maxLength = 0
@@ -1358,15 +1350,15 @@ class JsdocsDecorateCommand(sublime_plugin.TextCommand):
 
             lineLength = maxLength - (leadingWS + tabCount)
             leadingWS = tabCount * "\t" + " " * leadingWS
-            v.insert(edit, sel.end(), leadingWS + "/" * (lineLength + 3) + "\n")
+            v.insert(edit, sel.end(), leadingWS + " ╰─" + "─" * (lineLength - 2) + "┴" + "─" * (max(78, lineLength - 2) - lineLength) + "*/\n")
 
             for lineRegion in reversed(lines):
                 line = v.substr(lineRegion)
                 rPadding = 1 + (maxLength - lineRegion.size())
-                v.replace(edit, lineRegion, leadingWS + line + (" " * rPadding) + "//")
+                v.replace(edit, lineRegion, leadingWS + re.sub("^(\\s*)//\\s*", "\\1 │ ", line) + (" " * rPadding) + "│\n")
                 # break
 
-            v.insert(edit, sel.begin(), "/" * (lineLength + 3) + "\n")
+            v.insert(edit, sel.begin(), "/* " + "─" * (lineLength - 2) + "╮\n")
 
 
 class JsdocsDeindent(sublime_plugin.TextCommand):

@@ -1,5 +1,5 @@
 {
-  "scope": "source.js comment.block.documentation",
+  "scope": "source.js comment.block",
   "completions":
   [
     { "trigger" : "@async",         "contents": ""},
