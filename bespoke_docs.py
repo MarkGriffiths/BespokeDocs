@@ -1,5 +1,5 @@
 """
-Bespoke Docs for documetation.js
+Bespoke Docs for documetation.js.
 
 Based on:
 DocBlockr v2.14.1
@@ -12,6 +12,7 @@ import re
 import datetime
 import time
 from functools import reduce
+
 
 def read_line(view, point):
     if (point >= view.size()):
@@ -416,14 +417,16 @@ class BespokeDocsParser(object):
         if not extraTagAfter:
             self.addExtraTags(out)
 
-        # if there are arguments, add a @param for each
+        # if there are arguments, add a @arg/param for each
         if (args):
             # remove comments inside the argument list.
             args = re.sub(r'/\*.*?\*/', '', args)
             for argType, argName in self.parseArgs(args):
                 typeInfo = self.getTypeInfo(argType, argName)
 
-                format_str = "@param %s%s"
+                format_str = "@arg %s%s"
+                if (self.pluginSettings.get('prefer_param')):
+                    format_str = "@param %s%s"
                 if (self.pluginSettings.get('param_description')):
                     format_str += " ${1:[description]}"
 
